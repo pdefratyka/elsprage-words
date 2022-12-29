@@ -1,6 +1,8 @@
 package com.elsprage.words.web.controller;
 
+import com.elsprage.words.model.dto.LanguageDTO;
 import com.elsprage.words.model.dto.WordDTO;
+import com.elsprage.words.service.LanguageService;
 import com.elsprage.words.service.WordsService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +22,12 @@ import java.util.List;
 public class WordsController {
 
     private final WordsService wordsService;
+    private final LanguageService languageService;
+
+    @GetMapping("/languages")
+    public ResponseEntity<List<LanguageDTO>> getLanguages() {
+        return ResponseEntity.ok(languageService.getLanguages());
+    }
 
     @PostMapping
     public ResponseEntity<WordDTO> saveWord(@RequestBody WordDTO word) {

@@ -38,4 +38,10 @@ public class Word {
     private Language translationLanguage;
     @Column(name = "translation_language_id")
     private Long translationLanguageId;
+    @Column
+    private String image;
+    @Column
+    private String sound;
+    @Column
+    private String example;
 }
