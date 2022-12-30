@@ -11,6 +11,9 @@ import java.util.stream.Collectors;
 public class LanguageMapper {
 
     public LanguageDTO mapToLanguageDTO(final Language language) {
+        if (language == null) {
+            return null;
+        }
         return LanguageDTO.builder()
                 .id(language.getId())
                 .name(language.getName())
@@ -19,6 +22,9 @@ public class LanguageMapper {
     }
 
     public Language mapToLanguage(final LanguageDTO languageDTO) {
+        if (languageDTO == null) {
+            return null;
+        }
         return Language.builder()
                 .id(languageDTO.getId())
                 .name(languageDTO.getName())

@@ -44,4 +44,6 @@ public class Word {
     private String sound;
     @Column
     private String example;
+    @Column(name = "user_id")
+    private Long userId;
 }

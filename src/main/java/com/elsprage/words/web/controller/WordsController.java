@@ -37,7 +37,7 @@ public class WordsController {
     }
 
     @GetMapping
-    public List<String> getAllWords() {
-        return List.of("Cat", "Dog", "Horse");
+    public List<WordDTO> getAllWords() {
+        return wordsService.getAllWords();
     }
 }

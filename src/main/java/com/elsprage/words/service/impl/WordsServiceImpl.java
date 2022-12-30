@@ -8,6 +8,8 @@ import com.elsprage.words.service.WordsService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class WordsServiceImpl implements WordsService {
@@ -19,5 +21,11 @@ public class WordsServiceImpl implements WordsService {
     public WordDTO saveWord(final WordDTO word) {
         Word savedWord = wordRepository.save(wordMapper.mapToWord(word));
         return wordMapper.mapToWordDTO(savedWord);
+    }
+
+    @Override
+    public List<WordDTO> getAllWords() {
+        final List<Word> words = wordRepository.findAll();
+        return wordMapper.mapToWordsDTO(words);
     }
 }

@@ -13,4 +13,12 @@ public class WordDTO {
     private Long id;
     private String value;
     private String translation;
+    private Long userId;
+    private Long valueLanguageId;
+    private Long translationLanguageId;
+    private LanguageDTO valueLanguage;
+    private LanguageDTO translationLanguage;
+    private String image;
+    private String sound;
+    private String example;
 }
