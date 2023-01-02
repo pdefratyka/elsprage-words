@@ -9,6 +9,7 @@ CREATE TABLE elsprage_words.words
     image varchar(400) NOT NULL,
     sound varchar(400) NOT NULL,
     example varchar(200) NOT NULL,
+    image_data bytea,
     PRIMARY KEY (id)
 );
 

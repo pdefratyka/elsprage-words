@@ -21,4 +21,6 @@ public class WordDTO {
     private String image;
     private String sound;
     private String example;
+    private String imageDataEncoded;
+    private byte[] imageData;
 }
