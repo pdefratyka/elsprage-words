@@ -21,17 +21,6 @@ public class LanguageMapper {
                 .build();
     }
 
-    public Language mapToLanguage(final LanguageDTO languageDTO) {
-        if (languageDTO == null) {
-            return null;
-        }
-        return Language.builder()
-                .id(languageDTO.getId())
-                .name(languageDTO.getName())
-                .symbol(languageDTO.getSymbol())
-                .build();
-    }
-
     public List<LanguageDTO> mapToLanguagesDTO(final List<Language> languages) {
         return languages.stream()
                 .map(this::mapToLanguageDTO)

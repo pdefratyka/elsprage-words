@@ -4,6 +4,7 @@ import com.elsprage.words.external.api.image.ImageApiService;
 import com.elsprage.words.model.response.ImageApiResponse;
 import com.elsprage.words.service.ImageService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
@@ -13,8 +14,8 @@ import java.net.URLConnection;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class ImageServiceImpl implements ImageService {
-
     private ImageApiService imageApiService;
 
     @Override
@@ -28,11 +29,17 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public byte[] getImage(String keyword) throws IOException {
         final String url = getUrlOfImage(keyword);
+        if ("".equals(url)) {
+            return null;
+        }
         return getImageFromUrl(url);
     }
 
     private String getUrlOfImage(String keyword) {
         ImageApiResponse imageApiResponse = imageApiService.getImage(keyword);
+        if (imageApiResponse.getPhotos().isEmpty()) {
+            return "";
+        }
         return imageApiResponse.getPhotos().get(0).getSrc().getOriginal();
     }
 }

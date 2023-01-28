@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -19,5 +20,13 @@ public class LanguageServiceImpl implements LanguageService {
     @Override
     public List<LanguageDTO> getLanguages() {
         return languageMapper.mapToLanguagesDTO(languageRepository.findAll());
+    }
+
+    @Override
+    public Optional<String> getSymbolByLanguageId(Long id) {
+        return getLanguages().stream()
+                .filter(language -> language.getId().equals(id))
+                .map(LanguageDTO::getSymbol)
+                .findFirst();
     }
 }

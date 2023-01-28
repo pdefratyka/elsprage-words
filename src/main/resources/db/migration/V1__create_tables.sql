@@ -6,9 +6,9 @@ CREATE TABLE elsprage_words.words
     translation varchar(200) NOT NULL,
     value_language_id integer NOT NULL,
     translation_language_id integer NOT NULL,
-    image varchar(400) NOT NULL,
-    sound varchar(400) NOT NULL,
-    example varchar(200) NOT NULL,
+    image varchar(400),
+    sound varchar(400),
+    example varchar(200),
     image_data bytea,
     PRIMARY KEY (id)
 );

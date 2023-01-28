@@ -1,4 +1,4 @@
-package com.elsprage.words.config;
+package com.elsprage.words.common.constants;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

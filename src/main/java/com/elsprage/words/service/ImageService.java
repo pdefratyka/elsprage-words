@@ -1,7 +1,8 @@
 package com.elsprage.words.service;
 
+import com.elsprage.words.model.request.WordRequest;
+
 import java.io.IOException;
-import java.net.MalformedURLException;
 
 public interface ImageService {
     byte[] getImageFromUrl(String imageUrl) throws IOException;

@@ -1,6 +1,6 @@
 package com.elsprage.words.external.api.image;
 
-import com.elsprage.words.config.Constants;
+import com.elsprage.words.common.constants.Constants;
 import com.elsprage.words.external.api.WebClientProperties;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
