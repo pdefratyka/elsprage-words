@@ -3,6 +3,7 @@ package com.elsprage.words;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.Environment;
 
@@ -10,13 +11,14 @@ import java.util.Arrays;
 import java.util.List;
 
 @SpringBootApplication
-//@EnableDiscoveryClient
+@EnableDiscoveryClient
 @Slf4j
 public class WordsApplication {
 
     public static void main(String... args) {
         final SpringApplicationBuilder builder = new SpringApplicationBuilder(WordsApplication.class);
         final ConfigurableApplicationContext context = builder.run(args);
+        log.info(getStartupInfo(context));
     }
 
     static String getStartupInfo(final ConfigurableApplicationContext context) {

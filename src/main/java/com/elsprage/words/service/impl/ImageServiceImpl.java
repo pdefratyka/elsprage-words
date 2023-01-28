@@ -40,6 +40,6 @@ public class ImageServiceImpl implements ImageService {
         if (imageApiResponse.getPhotos().isEmpty()) {
             return "";
         }
-        return imageApiResponse.getPhotos().get(0).getSrc().getOriginal();
+        return imageApiResponse.getPhotos().get(0).getSrc().getMedium();
     }
 }
