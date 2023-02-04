@@ -2,7 +2,6 @@ package com.elsprage.words;
 
 import com.elsprage.words.external.api.image.ImageApiService;
 import com.elsprage.words.persistance.repository.WordRepository;
-import com.elsprage.words.service.ImageService;
 import com.elsprage.words.tools.tstcontainers.PostgresInitializer;
 import com.elsprage.words.tools.tstcontainers.TestContainerInitializer;
 import com.elsprage.words.tools.utils.TokenService;
@@ -60,5 +59,6 @@ public abstract class AbstractIT {
     @AfterEach
     public void afterEach() {
         wordRepository.deleteAll();
+
     }
 }

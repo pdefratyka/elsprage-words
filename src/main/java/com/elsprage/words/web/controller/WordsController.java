@@ -2,6 +2,7 @@ package com.elsprage.words.web.controller;
 
 import com.elsprage.words.model.dto.WordDTO;
 import com.elsprage.words.model.request.WordRequest;
+import com.elsprage.words.model.response.UsersWordsResponse;
 import com.elsprage.words.model.response.WordResponse;
 import com.elsprage.words.service.WordValidationService;
 import com.elsprage.words.service.WordsService;
@@ -9,8 +10,11 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,8 +40,27 @@ public class WordsController {
         return ResponseEntity.ok(wordResponse);
     }
 
-    @GetMapping
-    public List<WordDTO> getAllWords() {
-        return wordsService.getAllWords();
+    @GetMapping("/user")
+    public ResponseEntity<UsersWordsResponse> getUsersWords(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        log.info("Get words");
+        final List<WordDTO> words = wordsService.getWordsForUser(token);
+        final UsersWordsResponse usersWordsResponse = new UsersWordsResponse(words);
+        return ResponseEntity.ok(usersWordsResponse);
+    }
+
+    @PutMapping
+    public ResponseEntity<WordResponse> updateWord(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody WordRequest wordRequest) {
+        log.info("Update word: {}", wordRequest);
+        wordValidationService.validateWordRequest(wordRequest);
+        final WordDTO savedWord = wordsService.updateWord(wordRequest, token);
+        final WordResponse wordResponse = new WordResponse(savedWord);
+        return ResponseEntity.ok(wordResponse);
+    }
+
+    @DeleteMapping("/{wordId}")
+    public ResponseEntity<Void> deleteWord(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable Long wordId) {
+        log.info("Delete word with id: {}", wordId);
+        wordsService.deleteWord(wordId, token);
+        return ResponseEntity.ok().build();
     }
 }

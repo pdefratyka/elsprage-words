@@ -8,5 +8,9 @@ import java.util.List;
 public interface WordsService {
     WordDTO saveWord(WordRequest wordRequest, String token);
 
-    List<WordDTO> getAllWords();
+    List<WordDTO> getWordsForUser(String token);
+
+    WordDTO updateWord(WordRequest wordRequest, String token);
+
+    void deleteWord(Long wordId, String token);
 }

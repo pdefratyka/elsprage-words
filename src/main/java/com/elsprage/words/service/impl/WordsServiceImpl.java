@@ -2,6 +2,7 @@ package com.elsprage.words.service.impl;
 
 import com.elsprage.words.common.mapper.WordMapper;
 import com.elsprage.words.exception.LanguageDoesNotExists;
+import com.elsprage.words.exception.WordException;
 import com.elsprage.words.model.dto.WordDTO;
 import com.elsprage.words.model.request.WordRequest;
 import com.elsprage.words.persistance.entity.Word;
@@ -11,6 +12,7 @@ import com.elsprage.words.service.JwtService;
 import com.elsprage.words.service.LanguageService;
 import com.elsprage.words.service.WordsService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -18,6 +20,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Service
+@Slf4j
 @AllArgsConstructor
 public class WordsServiceImpl implements WordsService {
 
@@ -38,9 +41,35 @@ public class WordsServiceImpl implements WordsService {
     }
 
     @Override
-    public List<WordDTO> getAllWords() {
-        final List<Word> words = wordRepository.findAll();
+    public List<WordDTO> getWordsForUser(String token) {
+        final Long userId = jwtService.extractUserId(token);
+        log.info("Get words for user with id: {}", userId);
+        final List<Word> words = wordRepository.findByUserId(userId);
         return wordMapper.mapToWordsDTO(words);
+    }
+
+    @Override
+    public WordDTO updateWord(WordRequest wordRequest, String token) {
+        final Word word = wordRepository.findById(wordRequest.getId())
+                .orElseThrow(() -> new WordException.WordNotFound("Not found word with id: " + wordRequest.getId()));
+        final Long userId = jwtService.extractUserId(token);
+        if (word.getUserId().equals(userId)) {
+            return saveWord(wordRequest, token);
+        } else {
+            throw new WordException.WrongUserId("User is not allowed to update word with id: " + wordRequest.getId());
+        }
+    }
+
+    @Override
+    public void deleteWord(Long wordId, String token) {
+        final Word word = wordRepository.findById(wordId)
+                .orElseThrow(() -> new WordException.WordNotFound("Not found word with id: " + wordId));
+        final Long userId = jwtService.extractUserId(token);
+        if (word.getUserId().equals(userId)) {
+            wordRepository.deleteById(wordId);
+        } else {
+            throw new WordException.WrongUserId("User is not allowed to delete word with id: " + wordId);
+        }
     }
 
     private byte[] getImageData(WordRequest wordRequest) {

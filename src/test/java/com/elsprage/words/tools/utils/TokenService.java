@@ -12,11 +12,20 @@ import java.util.Map;
 
 public final class TokenService {
 
+    public static final Long DEFAULT_USER_ID = 1L;
     private static final String SECRET_KEY = "763979244226452948404D6251655468576D5A7134743777217A25432A462D4A";
 
+    public static String generateTokenWithUserId(Long userId) {
+        return generateToken(userId);
+    }
+
     public static String generateToken() {
+        return generateToken(DEFAULT_USER_ID);
+    }
+
+    private static String generateToken(Long userId) {
         final Map<String, Object> claims = new HashMap<>();
-        claims.put("userId", 1L);
+        claims.put("userId", userId);
 
         return Jwts
                 .builder()
