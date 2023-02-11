@@ -10,7 +10,11 @@ public interface WordsService {
 
     List<WordDTO> getWordsForUser(String token);
 
+    WordDTO getWordById(Long wordId, String token);
+
     WordDTO updateWord(WordRequest wordRequest, String token);
 
     void deleteWord(Long wordId, String token);
+
+
 }

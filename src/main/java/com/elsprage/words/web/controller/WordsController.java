@@ -40,6 +40,14 @@ public class WordsController {
         return ResponseEntity.ok(wordResponse);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<WordResponse> getWordById(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable Long id) {
+        log.info("Get word by id: {}", id);
+        final WordDTO word = wordsService.getWordById(id, token);
+        final WordResponse wordResponse = new WordResponse(word);
+        return ResponseEntity.ok(wordResponse);
+    }
+
     @GetMapping("/user")
     public ResponseEntity<UsersWordsResponse> getUsersWords(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         log.info("Get words");

@@ -49,6 +49,18 @@ public class WordsServiceImpl implements WordsService {
     }
 
     @Override
+    public WordDTO getWordById(Long wordId, String token) {
+        final Long userId = jwtService.extractUserId(token);
+        log.info("Get word with id: {} and user id: {}", wordId, userId);
+        final Word word = wordRepository.findById(wordId)
+                .orElseThrow(() -> new WordException.WordNotFound("Not found word with id: " + wordId));
+        if (!word.getUserId().equals(userId)) {
+            throw new WordException.WrongUserId("Word with given id is not assigned to this user");
+        }
+        return wordMapper.mapToWordDTO(word);
+    }
+
+    @Override
     public WordDTO updateWord(WordRequest wordRequest, String token) {
         final Word word = wordRepository.findById(wordRequest.getId())
                 .orElseThrow(() -> new WordException.WordNotFound("Not found word with id: " + wordRequest.getId()));
