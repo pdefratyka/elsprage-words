@@ -48,4 +48,8 @@ public class Word {
     private Long userId;
     @Column(name = "image_data")
     private byte[] imageData;
+
+    public String toString() {
+        return "Word(id=" + this.getId() + ", value=" + this.getValue() + ", translation=" + this.getTranslation() + ", valueLanguage=" + this.getValueLanguage() + ", valueLanguageId=" + this.getValueLanguageId() + ", translationLanguage=" + this.getTranslationLanguage() + ", translationLanguageId=" + this.getTranslationLanguageId() + ", image=" + this.getImage() + ", sound=" + this.getSound() + ", example=" + this.getExample() + ", userId=" + this.getUserId() + ")";
+    }
 }
