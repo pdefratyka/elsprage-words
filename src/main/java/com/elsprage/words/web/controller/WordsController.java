@@ -18,9 +18,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/words")
@@ -49,11 +48,12 @@ public class WordsController {
     }
 
     @GetMapping("/user")
-    public ResponseEntity<UsersWordsResponse> getUsersWords(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-        log.info("Get words");
-        final List<WordDTO> words = wordsService.getWordsForUser(token);
-        final UsersWordsResponse usersWordsResponse = new UsersWordsResponse(words);
-        return ResponseEntity.ok(usersWordsResponse);
+    public ResponseEntity<UsersWordsResponse> getUsersWords(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+                                                            @RequestParam(defaultValue = "") String query,
+                                                            @RequestParam(defaultValue = "0") Integer page,
+                                                            @RequestParam(defaultValue = "20") Integer pageSize) {
+        log.info("Get words for query: {}", query);
+        return ResponseEntity.ok(wordsService.getWordsForUser(token, query, page, pageSize));
     }
 
     @PutMapping

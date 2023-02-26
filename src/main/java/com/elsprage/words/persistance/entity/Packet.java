@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -40,6 +41,12 @@ public class Packet {
     private Long valueLanguageId;
     @Column(name = "translation_language_id")
     private Long translationLanguageId;
+    @ManyToOne
+    @JoinColumn(name = "translation_language_id", nullable = false, insertable = false, updatable = false)
+    private Language translationLanguage;
+    @ManyToOne
+    @JoinColumn(name = "value_language_id", nullable = false, insertable = false, updatable = false)
+    private Language valueLanguage;
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
             name = "packets_words",

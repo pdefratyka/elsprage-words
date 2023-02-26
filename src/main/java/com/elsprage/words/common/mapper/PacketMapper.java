@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 public final class PacketMapper {
 
     private final WordMapper wordMapper;
+    private final LanguageMapper languageMapper;
 
     public Packet mapToPacket(final PacketRequest packetRequest, final Long userId, final Set<Word> words) {
         if (packetRequest == null) {
@@ -59,6 +60,8 @@ public final class PacketMapper {
                 .name(packet.getName())
                 .valueLanguageId(packet.getValueLanguageId())
                 .translationLanguageId(packet.getTranslationLanguageId())
+                .valueLanguage(languageMapper.mapToLanguageDTO(packet.getValueLanguage()))
+                .translationLanguage(languageMapper.mapToLanguageDTO(packet.getTranslationLanguage()))
                 .id(packet.getId())
                 .wordsIds(packet.getWords().stream().map(Word::getId).toList())
                 .build();

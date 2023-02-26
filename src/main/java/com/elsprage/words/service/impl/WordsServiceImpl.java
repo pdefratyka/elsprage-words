@@ -5,6 +5,7 @@ import com.elsprage.words.exception.LanguageDoesNotExists;
 import com.elsprage.words.exception.WordException;
 import com.elsprage.words.model.dto.WordDTO;
 import com.elsprage.words.model.request.WordRequest;
+import com.elsprage.words.model.response.UsersWordsResponse;
 import com.elsprage.words.persistance.entity.Word;
 import com.elsprage.words.persistance.repository.WordRepository;
 import com.elsprage.words.service.ImageService;
@@ -13,10 +14,12 @@ import com.elsprage.words.service.LanguageService;
 import com.elsprage.words.service.WordsService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -41,11 +44,12 @@ public class WordsServiceImpl implements WordsService {
     }
 
     @Override
-    public List<WordDTO> getWordsForUser(String token) {
+    public UsersWordsResponse getWordsForUser(String token, String query, int page, int pageSize) {
         final Long userId = jwtService.extractUserId(token);
-        log.info("Get words for user with id: {}", userId);
-        final List<Word> words = wordRepository.findByUserId(userId);
-        return wordMapper.mapToWordsDTO(words);
+        log.info("Get words for user with id: {}, query: {}, page: {}, pageSize:{}", userId, query, page, pageSize);
+        final List<Word> words = wordRepository.findByUserId(userId, query.toLowerCase(), PageRequest.of(page, pageSize));
+        final BigDecimal size = wordRepository.findSizeOfListOfWords(userId, query.toLowerCase());
+        return new UsersWordsResponse(wordMapper.mapToWordsDTO(words), size, page, pageSize);
     }
 
     @Override

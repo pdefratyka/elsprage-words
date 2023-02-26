@@ -15,4 +15,6 @@ public class PacketDTO {
     Long valueLanguageId;
     Long translationLanguageId;
     String description;
+    LanguageDTO valueLanguage;
+    LanguageDTO translationLanguage;
 }
