@@ -14,6 +14,7 @@ import java.util.Set;
 @NoArgsConstructor
 @ToString
 public class PacketRequest {
+    private Long id;
     private String name;
     private Set<Long> wordsIds;
     private Long valueLanguageId;

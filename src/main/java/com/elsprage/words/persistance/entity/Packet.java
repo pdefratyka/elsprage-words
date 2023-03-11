@@ -11,6 +11,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -59,6 +60,11 @@ public class Packet {
 
     @PrePersist
     public void beforeSave() {
+        createdAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void beforeUpdate() {
         createdAt = LocalDateTime.now();
     }
 

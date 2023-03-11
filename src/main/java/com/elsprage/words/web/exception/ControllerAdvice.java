@@ -1,6 +1,7 @@
 package com.elsprage.words.web.exception;
 
 import com.elsprage.words.common.constants.ExceptionConstants;
+import com.elsprage.words.exception.PacketException;
 import com.elsprage.words.exception.WordException;
 import com.elsprage.words.exception.WordRequestValidationException;
 import com.elsprage.words.model.response.ExceptionResponse;
@@ -24,6 +25,14 @@ public class ControllerAdvice {
 
     @ExceptionHandler(WordException.class)
     public ResponseEntity<ExceptionResponse> handleWordException(WordException ex) {
+        log.error(ex.getMessage(), ex);
+        ExceptionResponse response = new ExceptionResponse(ex.getMessage(),
+                ex.getHttpStatus().value());
+        return ResponseEntity.status(ex.getHttpStatus()).body(response);
+    }
+
+    @ExceptionHandler(PacketException.class)
+    public ResponseEntity<ExceptionResponse> handlePacketException(PacketException ex) {
         log.error(ex.getMessage(), ex);
         ExceptionResponse response = new ExceptionResponse(ex.getMessage(),
                 ex.getHttpStatus().value());

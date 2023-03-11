@@ -9,7 +9,9 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -39,5 +41,17 @@ public class PacketController {
         final Set<PacketDTO> packetsDTOs = packetService.getUsersPackets(token);
         final UsersPacketsResponse packets = new UsersPacketsResponse(packetsDTOs);
         return ResponseEntity.ok(packets);
+    }
+
+    @GetMapping("/{packetId}")
+    public ResponseEntity<PacketDTO> getPacketById(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable Long packetId) {
+        final PacketDTO packet = packetService.getPacketById(packetId, token);
+        return ResponseEntity.ok(packet);
+    }
+
+    @DeleteMapping("/{packetId}")
+    public ResponseEntity<Void> removePacket(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable Long packetId) {
+        packetService.deletePacket(packetId, token);
+        return ResponseEntity.ok().build();
     }
 }

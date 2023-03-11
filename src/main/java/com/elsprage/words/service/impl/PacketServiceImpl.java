@@ -1,6 +1,7 @@
 package com.elsprage.words.service.impl;
 
 import com.elsprage.words.common.mapper.PacketMapper;
+import com.elsprage.words.exception.PacketException;
 import com.elsprage.words.model.dto.PacketDTO;
 import com.elsprage.words.model.request.PacketRequest;
 import com.elsprage.words.persistance.entity.Packet;
@@ -45,5 +46,30 @@ public class PacketServiceImpl implements PacketService {
         final Set<PacketDTO> packetDTOS = packetMapper.mapToPacketDTOsWithoutWordsMapping(packets);
         log.info("Users packets: {}", packetDTOS);
         return packetDTOS;
+    }
+
+    @Override
+    public PacketDTO getPacketById(final Long packetId, final String token) {
+        final Packet packet = packetRepository.findById(packetId)
+                .orElseThrow(() -> new PacketException.PacketNotFound(packetId));
+        validateIfUserHasAccessToPacket(packet, token);
+        return packetMapper.mapToPacketDTO(packet);
+    }
+
+    @Override
+    public void deletePacket(final Long packetId, final String token) {
+        log.info("Delete packet with id: {}", packetId);
+        final Packet packet = packetRepository.findById(packetId)
+                .orElseThrow(() -> new PacketException.PacketNotFound(packetId));
+        validateIfUserHasAccessToPacket(packet, token);
+        packetRepository.delete(packet);
+        log.info("Packet with id: {} has been deleted", packetId);
+    }
+
+    private void validateIfUserHasAccessToPacket(final Packet packet, final String token) {
+        final Long userId = jwtService.extractUserId(token);
+        if (!packet.getUserId().equals(userId)) {
+            throw new PacketException.NoAccessToPacket(packet.getId(), userId);
+        }
     }
 }

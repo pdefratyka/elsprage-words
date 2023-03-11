@@ -22,6 +22,7 @@ public final class PacketMapper {
             return null;
         }
         return Packet.builder()
+                .id(packetRequest.getId())
                 .userId(userId)
                 .name(packetRequest.getName())
                 .valueLanguageId(packetRequest.getValueLanguageId())
@@ -42,6 +43,8 @@ public final class PacketMapper {
                 .translationLanguageId(packet.getTranslationLanguageId())
                 .id(packet.getId())
                 .words(wordMapper.mapToWordsDTO(packet.getWords().stream().toList()))
+                .valueLanguage(languageMapper.mapToLanguageDTO(packet.getValueLanguage()))
+                .translationLanguage(languageMapper.mapToLanguageDTO(packet.getTranslationLanguage()))
                 .build();
     }
 
