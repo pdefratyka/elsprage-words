@@ -1,6 +1,7 @@
 package com.elsprage.words;
 
 import com.elsprage.words.persistance.repository.LanguageRepository;
+import com.elsprage.words.persistance.repository.PacketRepository;
 import com.elsprage.words.persistance.repository.WordRepository;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -13,4 +14,6 @@ public abstract class AbstractControllerTest {
     private LanguageRepository languageRepository;
     @MockBean
     private WordRepository wordRepository;
+    @MockBean
+    private PacketRepository packetRepository;
 }

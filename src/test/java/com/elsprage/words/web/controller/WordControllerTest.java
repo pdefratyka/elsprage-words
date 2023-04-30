@@ -30,7 +30,6 @@ public class WordControllerTest extends AbstractControllerTest {
     private static final String BASE_URL = "/words";
 
     private MockMvc mockMvc;
-
     private WordsService wordsService;
     private WordValidationService wordValidationService;
 
