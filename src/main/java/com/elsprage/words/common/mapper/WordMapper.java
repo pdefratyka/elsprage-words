@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -67,6 +68,16 @@ public class WordMapper {
     public List<WordDTO> mapToWordsDTO(final List<Word> words) {
         return words.stream()
                 .map(this::mapToWordDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<WordDTO> mapToWordsDTO(final List<Word> words, Map<Long, Boolean> usedWords) {
+        return words.stream()
+                .map(word -> {
+                    final WordDTO wordDTO = mapToWordDTO(word);
+                    wordDTO.setUsed(usedWords.get(word.getId()));
+                    return wordDTO;
+                })
                 .collect(Collectors.toList());
     }
 }

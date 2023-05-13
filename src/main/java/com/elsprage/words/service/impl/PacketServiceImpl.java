@@ -15,7 +15,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -64,6 +67,14 @@ public class PacketServiceImpl implements PacketService {
         validateIfUserHasAccessToPacket(packet, token);
         packetRepository.delete(packet);
         log.info("Packet with id: {} has been deleted", packetId);
+    }
+
+    @Override
+    public Map<Long, Boolean> isWordInUse(final List<Long> wordsIds) {
+        log.debug("Check if words with ids: {} are in use", wordsIds);
+        final List<Long> usedWords = packetRepository.findUsedWords(wordsIds);
+        log.debug("Words in use: {}", usedWords);
+        return wordsIds.stream().collect(Collectors.toMap(id -> id, id -> usedWords.contains(id)));
     }
 
     private void validateIfUserHasAccessToPacket(final Packet packet, final String token) {

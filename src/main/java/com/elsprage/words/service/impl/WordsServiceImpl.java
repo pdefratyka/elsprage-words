@@ -8,10 +8,7 @@ import com.elsprage.words.model.request.WordRequest;
 import com.elsprage.words.model.response.UsersWordsResponse;
 import com.elsprage.words.persistance.entity.Word;
 import com.elsprage.words.persistance.repository.WordRepository;
-import com.elsprage.words.service.ImageService;
-import com.elsprage.words.service.JwtService;
-import com.elsprage.words.service.LanguageService;
-import com.elsprage.words.service.WordsService;
+import com.elsprage.words.service.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -21,6 +18,7 @@ import org.springframework.util.ObjectUtils;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -33,6 +31,7 @@ public class WordsServiceImpl implements WordsService {
     private final WordMapper wordMapper;
     private final JwtService jwtService;
     private final LanguageService languageService;
+    private final PacketService packetService;
 
     @Override
     public WordDTO saveWord(WordRequest wordRequest, String token) {
@@ -49,7 +48,8 @@ public class WordsServiceImpl implements WordsService {
         log.info("Get words for user with id: {}, query: {}, page: {}, pageSize:{}", userId, query, page, pageSize);
         final List<Word> words = wordRepository.findByUserId(userId, query.toLowerCase(), PageRequest.of(page, pageSize));
         final BigDecimal size = wordRepository.findSizeOfListOfWords(userId, query.toLowerCase());
-        return new UsersWordsResponse(wordMapper.mapToWordsDTO(words), size, page, pageSize);
+        final Map<Long, Boolean> wordsInUse = packetService.isWordInUse(words.stream().map(Word::getId).toList());
+        return new UsersWordsResponse(wordMapper.mapToWordsDTO(words, wordsInUse), size, page, pageSize);
     }
 
     @Override

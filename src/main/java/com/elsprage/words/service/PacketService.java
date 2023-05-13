@@ -3,6 +3,8 @@ package com.elsprage.words.service;
 import com.elsprage.words.model.dto.PacketDTO;
 import com.elsprage.words.model.request.PacketRequest;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public interface PacketService {
@@ -13,4 +15,6 @@ public interface PacketService {
     PacketDTO getPacketById(Long packetId, String token);
 
     void deletePacket(Long packetId, String token);
+
+    Map<Long, Boolean> isWordInUse(List<Long> wordsIds);
 }
