@@ -125,9 +125,9 @@ public class WordsServiceImpl implements WordsService {
         String valueLanguageSymbol = languageService.getSymbolByLanguageId(wordRequest.getValueLanguageId())
                 .orElseThrow(() -> new LanguageDoesNotExists(wordRequest.getValueLanguageId()));
         if (EN_SYMBOL.equals(translationLanguageSymbol)) {
-            return wordRequest.getTranslation();
+            return wordRequest.getTranslation().split(";")[0];
         } else if (EN_SYMBOL.equals(valueLanguageSymbol)) {
-            return wordRequest.getValue();
+            return wordRequest.getValue().split(";")[0];
         }
         return null;
     }
