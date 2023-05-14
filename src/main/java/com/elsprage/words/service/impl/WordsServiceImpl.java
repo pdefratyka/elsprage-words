@@ -12,6 +12,7 @@ import com.elsprage.words.service.ImageService;
 import com.elsprage.words.service.JwtService;
 import com.elsprage.words.service.LanguageService;
 import com.elsprage.words.service.WordsService;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -77,11 +78,13 @@ public class WordsServiceImpl implements WordsService {
     }
 
     @Override
+    @Transactional
     public void deleteWord(Long wordId, String token) {
         final Word word = wordRepository.findById(wordId)
                 .orElseThrow(() -> new WordException.WordNotFound("Not found word with id: " + wordId));
         final Long userId = jwtService.extractUserId(token);
         if (word.getUserId().equals(userId)) {
+            wordRepository.deletePacketsWordsByWordId(wordId);
             wordRepository.deleteById(wordId);
         } else {
             throw new WordException.WrongUserId("User is not allowed to delete word with id: " + wordId);
