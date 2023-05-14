@@ -17,6 +17,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -48,7 +51,8 @@ public class Packet {
     @ManyToOne
     @JoinColumn(name = "value_language_id", nullable = false, insertable = false, updatable = false)
     private Language valueLanguage;
-    @ManyToMany(cascade = {CascadeType.ALL})
+
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "packets_words",
             joinColumns = {@JoinColumn(name = "packet_id", referencedColumnName = "id"),},
