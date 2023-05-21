@@ -1,6 +1,6 @@
 package com.elsprage.words;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -12,7 +12,7 @@ import java.util.List;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-@Slf4j
+@Log4j2
 public class WordsApplication {
 
     public static void main(String... args) {

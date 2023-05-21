@@ -2,11 +2,11 @@ package com.elsprage.words.tools.tstcontainers;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 import java.util.Arrays;
 
-@Slf4j
+@Log4j2
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TestContainerInitializer {
 

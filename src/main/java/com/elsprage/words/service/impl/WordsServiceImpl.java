@@ -14,7 +14,7 @@ import com.elsprage.words.service.LanguageService;
 import com.elsprage.words.service.WordsService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -24,7 +24,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Service
-@Slf4j
+@Log4j2
 @AllArgsConstructor
 public class WordsServiceImpl implements WordsService {
 

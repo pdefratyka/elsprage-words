@@ -3,7 +3,7 @@ package com.elsprage.words.external.api.image;
 import com.elsprage.words.external.api.WebClientUtils;
 import com.elsprage.words.model.response.ImageApiResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.reactive.ClientHttpConnector;
@@ -15,7 +15,7 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import java.time.Duration;
 
 @Service
-@Slf4j
+@Log4j2
 public class ImageApiServiceImpl implements ImageApiService {
     private static final int TIMEOUT = 30000;
     private static final String HEADER_REQUEST_TIMEOUT = "O-Request-Timeout";

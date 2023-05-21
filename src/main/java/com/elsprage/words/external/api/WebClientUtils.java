@@ -1,7 +1,7 @@
 package com.elsprage.words.external.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.Logger;
 import org.springframework.core.ResolvableType;
 import org.springframework.core.codec.Hints;
 import org.springframework.core.io.buffer.DataBuffer;

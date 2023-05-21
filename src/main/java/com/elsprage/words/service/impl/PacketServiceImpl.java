@@ -11,7 +11,7 @@ import com.elsprage.words.persistance.repository.WordRepository;
 import com.elsprage.words.service.JwtService;
 import com.elsprage.words.service.PacketService;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -19,7 +19,7 @@ import java.util.Set;
 
 @Service
 @AllArgsConstructor
-@Slf4j
+@Log4j2
 public class PacketServiceImpl implements PacketService {
 
     private final PacketRepository packetRepository;

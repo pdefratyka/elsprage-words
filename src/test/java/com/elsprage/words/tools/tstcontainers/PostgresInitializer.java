@@ -1,10 +1,10 @@
 package com.elsprage.words.tools.tstcontainers;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.utility.DockerImageName;
 
-@Slf4j
+@Log4j2
 public class PostgresInitializer implements ContainerInitializer<PostgreSQLContainer> {
 
     private static PostgreSQLContainer<?> container;
