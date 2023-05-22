@@ -15,7 +15,9 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -43,7 +45,8 @@ public class PacketServiceImpl implements PacketService {
         final Long userId = jwtService.extractUserId(token);
         log.info("Get packets for user with id: {}", userId);
         final Set<Packet> packets = packetRepository.findByUserId(userId);
-        final Set<PacketDTO> packetDTOS = packetMapper.mapToPacketDTOsWithoutWordsMapping(packets);
+        final Set<PacketDTO> packetDTOS = packetMapper.mapToPacketDTOsWithoutWordsMapping(packets)
+                        .stream().sorted().collect(Collectors.toCollection(LinkedHashSet::new));
         log.info("Users packets: {}", packetDTOS);
         return packetDTOS;
     }
