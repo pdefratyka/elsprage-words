@@ -7,7 +7,7 @@ import com.elsprage.words.model.response.WordResponse;
 import com.elsprage.words.service.WordValidationService;
 import com.elsprage.words.service.WordsService;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/words")
 @AllArgsConstructor
-@Slf4j
+@Log4j2
 public class WordsController {
 
     private final WordsService wordsService;

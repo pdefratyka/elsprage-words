@@ -4,7 +4,7 @@ import com.elsprage.words.external.api.image.ImageApiService;
 import com.elsprage.words.model.response.ImageApiResponse;
 import com.elsprage.words.service.ImageService;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
@@ -14,7 +14,7 @@ import java.net.URLConnection;
 
 @Service
 @AllArgsConstructor
-@Slf4j
+@Log4j2
 public class ImageServiceImpl implements ImageService {
     private ImageApiService imageApiService;
 
