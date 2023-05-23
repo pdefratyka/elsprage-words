@@ -45,8 +45,7 @@ public class PacketServiceImpl implements PacketService {
         final Long userId = jwtService.extractUserId(token);
         log.info("Get packets for user with id: {}", userId);
         final Set<Packet> packets = packetRepository.findByUserId(userId);
-        final Set<PacketDTO> packetDTOS = packetMapper.mapToPacketDTOsWithoutWordsMapping(packets)
-                        .stream().sorted().collect(Collectors.toCollection(LinkedHashSet::new));
+        final Set<PacketDTO> packetDTOS = packetMapper.mapToPacketDTOsWithoutWordsMapping(packets);
         log.info("Users packets: {}", packetDTOS);
         return packetDTOS;
     }
