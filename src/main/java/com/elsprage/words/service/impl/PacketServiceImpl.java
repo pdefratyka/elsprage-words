@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -46,6 +47,7 @@ public class PacketServiceImpl implements PacketService {
         log.info("Get packets for user with id: {}", userId);
         final Set<Packet> packets = packetRepository.findByUserId(userId);
         final Set<PacketDTO> packetDTOS = packetMapper.mapToPacketDTOsWithoutWordsMapping(packets);
+        sortPackets(packetDTOS);
         log.info("Users packets: {}", packetDTOS);
         return packetDTOS;
     }
@@ -73,5 +75,12 @@ public class PacketServiceImpl implements PacketService {
         if (!packet.getUserId().equals(userId)) {
             throw new PacketException.NoAccessToPacket(packet.getId(), userId);
         }
+    }
+
+    private void sortPackets(Set<PacketDTO> packetDTOS) {
+        Set<PacketDTO> sortedPackets = packetDTOS.stream().sorted(Comparator.comparing(PacketDTO::getName))
+                .collect(Collectors.toCollection(LinkedHashSet::new));
+        packetDTOS.clear();
+        packetDTOS.addAll(sortedPackets);
     }
 }

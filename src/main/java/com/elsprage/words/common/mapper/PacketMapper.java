@@ -7,6 +7,7 @@ import com.elsprage.words.persistance.entity.Word;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -73,6 +74,6 @@ public final class PacketMapper {
     public Set<PacketDTO> mapToPacketDTOsWithoutWordsMapping(final Set<Packet> packets) {
         return packets.stream()
                 .map(this::mapToPacketDtoWithoutWordMapping)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 }
