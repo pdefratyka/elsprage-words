@@ -1,6 +1,7 @@
 package com.elsprage.words.web.exception;
 
 import com.elsprage.words.common.constants.ExceptionConstants;
+import com.elsprage.words.exception.ExceptionCode;
 import com.elsprage.words.exception.PacketException;
 import com.elsprage.words.exception.WordException;
 import com.elsprage.words.exception.WordRequestValidationException;
@@ -20,6 +21,13 @@ public class ControllerAdvice {
         log.error(ex.getMessage(), ex);
         ExceptionResponse response = new ExceptionResponse(ex.getMessage(),
                 HttpStatus.BAD_REQUEST.value());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    @ExceptionHandler(WordException.WordAlreadyExistException.class)
+    public ResponseEntity<ExceptionResponse> handleWordAlreadyExistException(Exception ex) {
+        ExceptionResponse response = new ExceptionResponse(ExceptionConstants.INTERNAL_SERVER_ERROR,
+                HttpStatus.INTERNAL_SERVER_ERROR.value(), ExceptionCode.WORD_ALREADY_EXIST_CODE);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 

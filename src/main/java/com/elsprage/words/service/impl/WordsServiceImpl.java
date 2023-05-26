@@ -40,8 +40,15 @@ public class WordsServiceImpl implements WordsService {
         final byte[] imageData = getImageData(wordRequest);
         final Long userId = jwtService.extractUserId(token);
         final WordDTO wordDTO = wordMapper.mapToWordDTO(wordRequest, userId, imageData);
-        final Word savedWord = wordRepository.save(wordMapper.mapToWord(wordDTO));
-        return wordMapper.mapToWordDTO(savedWord);
+        try {
+            final Word savedWord = wordRepository.save(wordMapper.mapToWord(wordDTO));
+            return wordMapper.mapToWordDTO(savedWord);
+        } catch (Exception ex) {
+            if (ex.getMessage().contains("constraint [unique_value_with_value_language_id]")) {
+                throw new WordException.WordAlreadyExistException(ex);
+            }
+            throw new RuntimeException(ex);
+        }
     }
 
     @Override

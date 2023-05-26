@@ -13,6 +13,11 @@ public class WordException extends RuntimeException {
         this.httpStatus = httpStatus;
     }
 
+    public WordException(String message, HttpStatus httpStatus, Throwable cause) {
+        super(message, cause);
+        this.httpStatus = httpStatus;
+    }
+
     public static class WordNotFound extends WordException {
         public WordNotFound(String message) {
             super(message, HttpStatus.BAD_REQUEST);
@@ -22,6 +27,12 @@ public class WordException extends RuntimeException {
     public static class WrongUserId extends WordException {
         public WrongUserId(String message) {
             super(message, HttpStatus.FORBIDDEN);
+        }
+    }
+
+    public static class WordAlreadyExistException extends WordException {
+        public WordAlreadyExistException(Throwable cause) {
+            super("Word already exist", HttpStatus.BAD_REQUEST, cause);
         }
     }
 }
