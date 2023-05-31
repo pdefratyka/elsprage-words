@@ -18,6 +18,7 @@ public class WordMapper {
 
     public WordDTO mapToWordDTO(final Word word) {
         final String encodedImage = ImageUtils.encodeImage(word.getImageData());
+        final String encodedAudio = ImageUtils.encodeImage(word.getAudioData());
         return WordDTO.builder()
                 .id(word.getId())
                 .value(word.getValue())
@@ -31,6 +32,7 @@ public class WordMapper {
                 .translationLanguage(languageMapper.mapToLanguageDTO(word.getTranslationLanguage()))
                 .valueLanguage(languageMapper.mapToLanguageDTO(word.getValueLanguage()))
                 .imageDataEncoded(encodedImage)
+                .audioDataEncoded(encodedAudio)
                 .audioData(word.getAudioData())
                 .build();
     }

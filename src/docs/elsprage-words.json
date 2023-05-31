@@ -6,7 +6,7 @@
     },
     "servers": [
         {
-            "url": "http://localhost:8081",
+            "url": "http://localhost:8085",
             "description": "Generated server url"
         }
     ],
@@ -469,7 +469,14 @@
                     "imageDataEncoded": {
                         "type": "string"
                     },
+                    "audioDataEncoded": {
+                        "type": "string"
+                    },
                     "imageData": {
+                        "type": "string",
+                        "format": "byte"
+                    },
+                    "audioData": {
                         "type": "string",
                         "format": "byte"
                     }
