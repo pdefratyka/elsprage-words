@@ -19,8 +19,8 @@ public class WordException extends RuntimeException {
     }
 
     public static class WordNotFound extends WordException {
-        public WordNotFound(String message) {
-            super(message, HttpStatus.BAD_REQUEST);
+        public WordNotFound(Long wordId) {
+            super("Not found word with id: " + wordId, HttpStatus.BAD_REQUEST);
         }
     }
 

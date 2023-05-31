@@ -8,10 +8,7 @@ import com.elsprage.words.model.request.WordRequest;
 import com.elsprage.words.model.response.UsersWordsResponse;
 import com.elsprage.words.persistance.entity.Word;
 import com.elsprage.words.persistance.repository.WordRepository;
-import com.elsprage.words.service.ImageService;
-import com.elsprage.words.service.JwtService;
-import com.elsprage.words.service.LanguageService;
-import com.elsprage.words.service.WordsService;
+import com.elsprage.words.service.*;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -34,15 +31,21 @@ public class WordsServiceImpl implements WordsService {
     private final WordMapper wordMapper;
     private final JwtService jwtService;
     private final LanguageService languageService;
+    private final WordAdditionalInfoService wordAdditionalInfoService;
 
     @Override
     public WordDTO saveWord(WordRequest wordRequest, String token) {
         final byte[] imageData = getImageData(wordRequest);
         final Long userId = jwtService.extractUserId(token);
         final WordDTO wordDTO = wordMapper.mapToWordDTO(wordRequest, userId, imageData);
+        final Word savedWord = saveWord(wordDTO);
+        wordAdditionalInfoService.setAdditionalInfo(savedWord);
+        return wordMapper.mapToWordDTO(savedWord);
+    }
+
+    private Word saveWord(final WordDTO wordDTO) {
         try {
-            final Word savedWord = wordRepository.save(wordMapper.mapToWord(wordDTO));
-            return wordMapper.mapToWordDTO(savedWord);
+            return wordRepository.save(wordMapper.mapToWord(wordDTO));
         } catch (Exception ex) {
             if (ex.getMessage().contains("constraint [unique_value_with_value_language_id]")) {
                 throw new WordException.WordAlreadyExistException(ex);
@@ -65,7 +68,7 @@ public class WordsServiceImpl implements WordsService {
         final Long userId = jwtService.extractUserId(token);
         log.info("Get word with id: {} and user id: {}", wordId, userId);
         final Word word = wordRepository.findById(wordId)
-                .orElseThrow(() -> new WordException.WordNotFound("Not found word with id: " + wordId));
+                .orElseThrow(() -> new WordException.WordNotFound(wordId));
         if (!word.getUserId().equals(userId)) {
             throw new WordException.WrongUserId("Word with given id is not assigned to this user");
         }
@@ -75,7 +78,7 @@ public class WordsServiceImpl implements WordsService {
     @Override
     public WordDTO updateWord(WordRequest wordRequest, String token) {
         final Word word = wordRepository.findById(wordRequest.getId())
-                .orElseThrow(() -> new WordException.WordNotFound("Not found word with id: " + wordRequest.getId()));
+                .orElseThrow(() -> new WordException.WordNotFound(wordRequest.getId()));
         final Long userId = jwtService.extractUserId(token);
         if (word.getUserId().equals(userId)) {
             return saveWord(wordRequest, token);
@@ -88,7 +91,7 @@ public class WordsServiceImpl implements WordsService {
     @Transactional
     public void deleteWord(Long wordId, String token) {
         final Word word = wordRepository.findById(wordId)
-                .orElseThrow(() -> new WordException.WordNotFound("Not found word with id: " + wordId));
+                .orElseThrow(() -> new WordException.WordNotFound(wordId));
         final Long userId = jwtService.extractUserId(token);
         if (word.getUserId().equals(userId)) {
             wordRepository.deletePacketsWordsByWordId(wordId);
