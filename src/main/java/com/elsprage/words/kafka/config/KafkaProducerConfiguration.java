@@ -1,6 +1,5 @@
 package com.elsprage.words.kafka.config;
 
-import com.elsprage.external.words.avro.WordAudioEvent;
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -19,11 +18,11 @@ import java.util.Map;
 public class KafkaProducerConfiguration {
 
     @Bean
-    public KafkaTemplate<String, WordAudioEvent> kafkaTemplate(KafkaProperties kafkaProperties) {
+    public KafkaTemplate<String, Object> kafkaTemplate(KafkaProperties kafkaProperties) {
         return new KafkaTemplate<>(producerFactory(kafkaProperties));
     }
 
-    public ProducerFactory<String, WordAudioEvent> producerFactory(KafkaProperties kafkaProperties) {
+    public ProducerFactory<String, Object> producerFactory(KafkaProperties kafkaProperties) {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.getBootstrapServers());
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);

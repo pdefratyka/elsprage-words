@@ -19,4 +19,11 @@ public class WordModificationServiceImpl implements WordModificationService {
         word.setAudioData(audioData);
         wordRepository.save(word);
     }
+
+    @Override
+    public void setImage(Long wordId, byte[] imageData) {
+        final Word word = wordRepository.findById(wordId).orElseThrow(() -> new WordException.WordNotFound(wordId));
+        word.setImageData(imageData);
+        wordRepository.save(word);
+    }
 }

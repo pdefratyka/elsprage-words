@@ -1,22 +1,21 @@
 package com.elsprage.words.service.impl;
 
 import com.elsprage.words.common.mapper.WordMapper;
-import com.elsprage.words.exception.LanguageDoesNotExists;
 import com.elsprage.words.exception.WordException;
 import com.elsprage.words.model.dto.WordDTO;
 import com.elsprage.words.model.request.WordRequest;
 import com.elsprage.words.model.response.UsersWordsResponse;
 import com.elsprage.words.persistance.entity.Word;
 import com.elsprage.words.persistance.repository.WordRepository;
-import com.elsprage.words.service.*;
+import com.elsprage.words.service.JwtService;
+import com.elsprage.words.service.WordAdditionalInfoService;
+import com.elsprage.words.service.WordsService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -25,19 +24,15 @@ import java.util.List;
 @AllArgsConstructor
 public class WordsServiceImpl implements WordsService {
 
-    private static final String EN_SYMBOL = "en";
     private final WordRepository wordRepository;
-    private final ImageService imageService;
     private final WordMapper wordMapper;
     private final JwtService jwtService;
-    private final LanguageService languageService;
     private final WordAdditionalInfoService wordAdditionalInfoService;
 
     @Override
     public WordDTO saveWord(WordRequest wordRequest, String token) {
-        final byte[] imageData = getImageData(wordRequest);
         final Long userId = jwtService.extractUserId(token);
-        final WordDTO wordDTO = wordMapper.mapToWordDTO(wordRequest, userId, imageData);
+        final WordDTO wordDTO = wordMapper.mapToWordDTO(wordRequest, userId);
         final Word savedWord = saveWord(wordDTO);
         wordAdditionalInfoService.setAdditionalInfo(savedWord);
         return wordMapper.mapToWordDTO(savedWord);
@@ -99,49 +94,5 @@ public class WordsServiceImpl implements WordsService {
         } else {
             throw new WordException.WrongUserId("User is not allowed to delete word with id: " + wordId);
         }
-    }
-
-    private byte[] getImageData(WordRequest wordRequest) {
-        if (!ObjectUtils.isEmpty(wordRequest.getImage())) {
-            return getImageFromUrl(wordRequest.getImage());
-        } else {
-            return getImageByKeyword(wordRequest);
-        }
-    }
-
-    private byte[] getImageFromUrl(String image) {
-        if (!ObjectUtils.isEmpty(image)) {
-            try {
-                return imageService.getImageFromUrl(image);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return null;
-    }
-
-    private byte[] getImageByKeyword(WordRequest wordRequest) {
-        final String keyword = getKeywordFromImage(wordRequest);
-        if (!ObjectUtils.isEmpty(keyword)) {
-            try {
-                return imageService.getImage(keyword);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return null;
-    }
-
-    private String getKeywordFromImage(WordRequest wordRequest) {
-        String translationLanguageSymbol = languageService.getSymbolByLanguageId(wordRequest.getTranslationLanguageId())
-                .orElseThrow(() -> new LanguageDoesNotExists(wordRequest.getTranslationLanguageId()));
-        String valueLanguageSymbol = languageService.getSymbolByLanguageId(wordRequest.getValueLanguageId())
-                .orElseThrow(() -> new LanguageDoesNotExists(wordRequest.getValueLanguageId()));
-        if (EN_SYMBOL.equals(translationLanguageSymbol)) {
-            return wordRequest.getTranslation().split(";")[0];
-        } else if (EN_SYMBOL.equals(valueLanguageSymbol)) {
-            return wordRequest.getValue().split(";")[0];
-        }
-        return null;
     }
 }

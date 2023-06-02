@@ -18,10 +18,14 @@ public class WordModificationListenerService {
 
     @KafkaListener(topics = KafkaConstants.WORD_MODIFICATION_TOPIC, groupId = KafkaConstants.GROUP_ID)
     public void consumeMessage(WordModificationEvent message) {
-        log.info("Received message: {}", message);
+        log.info("Received message for word: {}, audio:{}, image:{}", message.getWordId(),
+                message.getAudioFile() != null, message.getImageFile() != null);
         if (message.getActionType().equals(WordModificationActionType.AUDIO_UPDATE)) {
             log.info("Process audio update");
             wordModificationService.setAudio(message.getWordId(), message.getAudioFile().array());
+        } else if (message.getActionType().equals(WordModificationActionType.IMAGE_UPDATE)) {
+            log.info("Process image update");
+            wordModificationService.setImage(message.getWordId(), message.getImageFile().array());
         }
     }
 }

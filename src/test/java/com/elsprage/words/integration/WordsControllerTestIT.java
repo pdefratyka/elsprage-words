@@ -17,8 +17,6 @@ import java.io.IOException;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 public class WordsControllerTestIT extends AbstractIT {
 
@@ -40,7 +38,7 @@ public class WordsControllerTestIT extends AbstractIT {
         final WordDTO requestBody = getWordDTORequest();
         requestSpecification = requestSpecification
                 .body(objectMapper.writeValueAsString(requestBody));
-        when(imageService.getImageFromUrl(any())).thenReturn(null);
+//        when(imageService.getImageFromUrl(any())).thenReturn(null);
         // when && then
         given(requestSpecification)
                 .when()
@@ -82,7 +80,7 @@ public class WordsControllerTestIT extends AbstractIT {
         requestBody.setValue(afterValue);
         requestSpecification = requestSpecification
                 .body(objectMapper.writeValueAsString(requestBody));
-        when(imageService.getImageFromUrl(any())).thenReturn(null);
+//        when(imageService.getImageFromUrl(any())).thenReturn(null);
         // when && then
         given(requestSpecification)
                 .when()

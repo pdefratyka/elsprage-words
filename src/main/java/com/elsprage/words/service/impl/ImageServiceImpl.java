@@ -1,45 +1,54 @@
 package com.elsprage.words.service.impl;
 
-import com.elsprage.words.external.api.image.ImageApiService;
-import com.elsprage.words.model.response.ImageApiResponse;
+import com.elsprage.words.exception.LanguageDoesNotExists;
+import com.elsprage.words.kafka.producer.ImageKafkaMessageProducerService;
+import com.elsprage.words.persistance.entity.Word;
 import com.elsprage.words.service.ImageService;
+import com.elsprage.words.service.LanguageService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.util.FileCopyUtils;
-
-import java.io.IOException;
-import java.net.URL;
-import java.net.URLConnection;
 
 @Service
 @AllArgsConstructor
 @Log4j2
 public class ImageServiceImpl implements ImageService {
-    private ImageApiService imageApiService;
+
+    private static final String EN_SYMBOL = "en";
+
+    private final ImageKafkaMessageProducerService imageKafkaMessageProducerService;
+    private final LanguageService languageService;
 
     @Override
-    public byte[] getImageFromUrl(String imageUrl) throws IOException {
-        URL url = new URL(imageUrl);
-        URLConnection connection = url.openConnection();
-        connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3");
-        return FileCopyUtils.copyToByteArray(connection.getInputStream());
+    public void findImageForWord(Word word) {
+        log.info("Sending event to find image for word: {}", word);
+        final String keyword = getKeywordFromImage(word);
+        if (!StringUtils.isBlank(keyword)) {
+            sendAudioEvent(word.getId(), keyword, word.getValueLanguageId());
+        }
     }
 
-    @Override
-    public byte[] getImage(String keyword) throws IOException {
-        final String url = getUrlOfImage(keyword);
-        if ("".equals(url)) {
-            return null;
+    private void sendAudioEvent(final Long wordId, final String keyword, final Long languageId) {
+        try {
+            final String language = languageService.getSymbolByLanguageId(languageId)
+                    .orElseThrow(() -> new LanguageDoesNotExists(languageId));
+            imageKafkaMessageProducerService.sendMessage(wordId, keyword, language);
+        } catch (Exception e) {
+            log.error("Error while sending message to kafka", e);
         }
-        return getImageFromUrl(url);
     }
 
-    private String getUrlOfImage(String keyword) {
-        ImageApiResponse imageApiResponse = imageApiService.getImage(keyword);
-        if (imageApiResponse.getPhotos().isEmpty()) {
-            return "";
+    private String getKeywordFromImage(Word word) {
+        String translationLanguageSymbol = languageService.getSymbolByLanguageId(word.getTranslationLanguageId())
+                .orElseThrow(() -> new LanguageDoesNotExists(word.getTranslationLanguageId()));
+        String valueLanguageSymbol = languageService.getSymbolByLanguageId(word.getValueLanguageId())
+                .orElseThrow(() -> new LanguageDoesNotExists(word.getValueLanguageId()));
+        if (EN_SYMBOL.equals(translationLanguageSymbol)) {
+            return word.getTranslation().split(";")[0];
+        } else if (EN_SYMBOL.equals(valueLanguageSymbol)) {
+            return word.getValue().split(";")[0];
         }
-        return imageApiResponse.getPhotos().get(0).getSrc().getMedium();
+        return null;
     }
 }

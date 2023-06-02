@@ -9,14 +9,20 @@
     },
     {
       "name": "audioFile",
-      "type": "bytes"
+      "type": ["null", "bytes"],
+      "default":null
+    },
+    {
+      "name": "imageFile",
+      "type": ["null", "bytes"],
+      "default":null
     },
     {
         "name":"actionType",
         "type": {
           "type": "enum",
           "name": "WordModificationActionType",
-          "symbols": ["AUDIO_UPDATE", "UNKNOWN"]
+          "symbols": ["AUDIO_UPDATE", "IMAGE_UPDATE", "UNKNOWN"]
         }
     }
   ]

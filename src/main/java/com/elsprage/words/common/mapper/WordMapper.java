@@ -53,7 +53,7 @@ public class WordMapper {
                 .build();
     }
 
-    public WordDTO mapToWordDTO(final WordRequest wordRequest, Long userId, byte[] imageData) {
+    public WordDTO mapToWordDTO(final WordRequest wordRequest, Long userId) {
         return WordDTO.builder()
                 .id(wordRequest.getId())
                 .value(wordRequest.getValue())
@@ -63,7 +63,6 @@ public class WordMapper {
                 .example(wordRequest.getExample())
                 .image(wordRequest.getImage())
                 .sound(wordRequest.getSound())
-                .imageData(imageData)
                 .userId(userId)
                 .build();
     }

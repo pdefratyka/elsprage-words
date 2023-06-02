@@ -1,0 +1,19 @@
+{
+  "type": "record",
+  "name": "WordImageEvent",
+  "namespace": "com.elsprage.external.words.avro",
+  "fields": [
+    {
+      "name": "wordId",
+      "type": "long"
+    },
+    {
+      "name": "key",
+      "type": "string"
+    },
+    {
+      "name": "language",
+      "type": "string"
+    }
+  ]
+}
