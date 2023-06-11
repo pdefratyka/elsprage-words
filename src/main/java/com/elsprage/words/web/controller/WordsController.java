@@ -4,22 +4,13 @@ import com.elsprage.words.model.dto.WordDTO;
 import com.elsprage.words.model.request.WordRequest;
 import com.elsprage.words.model.response.UsersWordsResponse;
 import com.elsprage.words.model.response.WordResponse;
-import com.elsprage.words.service.WordValidationService;
 import com.elsprage.words.service.WordsService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/words")
@@ -28,12 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class WordsController {
 
     private final WordsService wordsService;
-    private final WordValidationService wordValidationService;
 
     @PostMapping
-    public ResponseEntity<WordResponse> saveWord(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody WordRequest wordRequest) {
+    public ResponseEntity<WordResponse> saveWord(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @Validated @RequestBody WordRequest wordRequest) {
         log.info("Save word: {}", wordRequest);
-        wordValidationService.validateWordRequest(wordRequest);
         final WordDTO savedWord = wordsService.saveWord(wordRequest, token);
         final WordResponse wordResponse = new WordResponse(savedWord);
         return ResponseEntity.ok(wordResponse);
@@ -57,9 +46,8 @@ public class WordsController {
     }
 
     @PutMapping
-    public ResponseEntity<WordResponse> updateWord(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody WordRequest wordRequest) {
+    public ResponseEntity<WordResponse> updateWord(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody @Validated WordRequest wordRequest) {
         log.info("Update word: {}", wordRequest);
-        wordValidationService.validateWordRequest(wordRequest);
         final WordDTO savedWord = wordsService.updateWord(wordRequest, token);
         final WordResponse wordResponse = new WordResponse(savedWord);
         return ResponseEntity.ok(wordResponse);

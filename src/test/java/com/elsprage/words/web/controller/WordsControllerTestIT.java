@@ -1,4 +1,4 @@
-package com.elsprage.words.integration;
+package com.elsprage.words.web.controller;
 
 import com.elsprage.words.AbstractIT;
 import com.elsprage.words.common.mapper.WordMapper;

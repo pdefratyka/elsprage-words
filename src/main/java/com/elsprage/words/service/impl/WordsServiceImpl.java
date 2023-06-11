@@ -14,6 +14,7 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -45,7 +46,7 @@ public class WordsServiceImpl implements WordsService {
             if (ex.getMessage().contains("constraint [unique_value_with_value_language_id]")) {
                 throw new WordException.WordAlreadyExistException(ex);
             }
-            throw new RuntimeException(ex);
+            throw new WordException("Unexpected exception", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
