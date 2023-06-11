@@ -34,6 +34,7 @@ public class WordMapper {
                 .imageDataEncoded(encodedImage)
                 .audioDataEncoded(encodedAudio)
                 .audioData(word.getAudioData())
+                .explanation(word.getExplanation())
                 .build();
     }
 
@@ -50,6 +51,7 @@ public class WordMapper {
                 .sound(wordDTO.getSound())
                 .imageData(wordDTO.getImageData())
                 .audioData(wordDTO.getAudioData())
+                .explanation(wordDTO.getExplanation())
                 .build();
     }
 
@@ -64,6 +66,7 @@ public class WordMapper {
                 .image(wordRequest.getImage())
                 .sound(wordRequest.getSound())
                 .userId(userId)
+                .explanation(wordRequest.getExplanation())
                 .build();
     }
 

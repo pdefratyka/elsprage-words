@@ -23,4 +23,5 @@ public class WordRequest {
     private String image;
     private String sound;
     private String example;
+    private String explanation;
 }

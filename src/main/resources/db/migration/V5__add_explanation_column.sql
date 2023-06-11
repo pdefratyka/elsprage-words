@@ -1,0 +1,1 @@
+ALTER TABLE elsprage_words.words ADD COLUMN explanation varchar(1000);
