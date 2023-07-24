@@ -14,7 +14,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -78,7 +77,8 @@ public class PacketServiceImpl implements PacketService {
     }
 
     private void sortPackets(Set<PacketDTO> packetDTOS) {
-        Set<PacketDTO> sortedPackets = packetDTOS.stream().sorted(Comparator.comparing(PacketDTO::getName))
+        Set<PacketDTO> sortedPackets = packetDTOS.stream()
+                .sorted(PacketComparator::comparePackets)
                 .collect(Collectors.toCollection(LinkedHashSet::new));
         packetDTOS.clear();
         packetDTOS.addAll(sortedPackets);
