@@ -4,6 +4,7 @@ import com.elsprage.words.common.mapper.WordMapper;
 import com.elsprage.words.exception.WordException;
 import com.elsprage.words.model.dto.WordDTO;
 import com.elsprage.words.model.request.WordRequest;
+import com.elsprage.words.model.request.WordUpdateRequest;
 import com.elsprage.words.model.response.UsersWordsResponse;
 import com.elsprage.words.persistance.entity.Word;
 import com.elsprage.words.persistance.repository.WordRepository;
@@ -78,6 +79,21 @@ public class WordsServiceImpl implements WordsService {
         final Long userId = jwtService.extractUserId(token);
         if (word.getUserId().equals(userId)) {
             return saveWord(wordRequest, token);
+        } else {
+            throw new WordException.WrongUserId("User is not allowed to update word with id: " + wordRequest.getId());
+        }
+    }
+
+    @Override
+    public WordDTO updateWord(WordUpdateRequest wordRequest, String token) {
+        final Word word = wordRepository.findById(wordRequest.getId())
+                .orElseThrow(() -> new WordException.WordNotFound(wordRequest.getId()));
+        final Long userId = jwtService.extractUserId(token);
+        if (word.getUserId().equals(userId)) {
+            word.setValue(wordRequest.getValue());
+            word.setTranslation(wordRequest.getTranslation());
+            Word savedWord = wordRepository.save(word);
+            return wordMapper.mapToWordDTO(savedWord);
         } else {
             throw new WordException.WrongUserId("User is not allowed to update word with id: " + wordRequest.getId());
         }

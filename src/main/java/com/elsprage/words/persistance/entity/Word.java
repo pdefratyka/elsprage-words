@@ -1,13 +1,6 @@
 package com.elsprage.words.persistance.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -52,6 +45,12 @@ public class Word {
     private byte[] audioData;
     @Column(name = "explanation")
     private String explanation;
+    @Column(name = "example_audio")
+    private byte[] exampleAudio;
+    @Column(name = "translation_audio")
+    private byte[] translationAudio;
+    @Column(name = "explanation_audio")
+    private byte[] explanationAudio;
 
     public String toString() {
         return "Word(id=" + this.getId() + ", value=" + this.getValue() + ", translation=" + this.getTranslation() + ", valueLanguage=" + this.getValueLanguage() + ", valueLanguageId=" + this.getValueLanguageId() + ", translationLanguage=" + this.getTranslationLanguage() + ", translationLanguageId=" + this.getTranslationLanguageId() + ", image=" + this.getImage() + ", sound=" + this.getSound() + ", example=" + this.getExample() + ", userId=" + this.getUserId() + ")";

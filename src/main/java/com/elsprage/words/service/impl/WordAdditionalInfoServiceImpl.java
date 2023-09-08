@@ -18,7 +18,10 @@ public class WordAdditionalInfoServiceImpl implements WordAdditionalInfoService 
 
     @Override
     public void setAdditionalInfo(final Word word) {
-        audioService.findAudioForWord(word);
+        if (word.getAudioData() == null) {
+            log.info("Find audio data for word: {}", word.getValue());
+            audioService.findAudioForWord(word);
+        }
         imageService.findImageForWord(word);
     }
 }

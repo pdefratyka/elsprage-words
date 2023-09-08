@@ -26,6 +26,12 @@ public class WordDTO {
     private byte[] imageData;
     private byte[] audioData;
     private String explanation;
+    private byte[] explanationAudio;
+    private byte[] exampleAudio;
+    private byte[] translationAudio;
+    private String explanationAudioEncoded;
+    private String exampleAudioEncoded;
+    private String translationAudioEncoded;
 
     public String toString() {
         return "WordDTO(id=" + this.getId() + ", value=" + this.getValue() + ", translation=" + this.getTranslation() + ", userId=" + this.getUserId() + ", valueLanguageId=" + this.getValueLanguageId() + ", translationLanguageId=" + this.getTranslationLanguageId() + ", valueLanguage=" + this.getValueLanguage() + ", translationLanguage=" + this.getTranslationLanguage() + ", image=" + this.getImage() + ", sound=" + this.getSound() + ", example=" + this.getExample() + ", imageDataEncoded=" + this.getImageDataEncoded() + ")";

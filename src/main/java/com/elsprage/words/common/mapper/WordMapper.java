@@ -19,6 +19,11 @@ public class WordMapper {
     public WordDTO mapToWordDTO(final Word word) {
         final String encodedImage = ImageUtils.encodeImage(word.getImageData());
         final String encodedAudio = ImageUtils.encodeImage(word.getAudioData());
+
+        final String exampleAudioEncoded = ImageUtils.encodeImage(word.getExampleAudio());
+        final String explanationAudioEncoded = ImageUtils.encodeImage(word.getExplanationAudio());
+        final String translationAudioEncoded = ImageUtils.encodeImage(word.getTranslationAudio());
+
         return WordDTO.builder()
                 .id(word.getId())
                 .value(word.getValue())
@@ -33,8 +38,14 @@ public class WordMapper {
                 .valueLanguage(languageMapper.mapToLanguageDTO(word.getValueLanguage()))
                 .imageDataEncoded(encodedImage)
                 .audioDataEncoded(encodedAudio)
-                .audioData(word.getAudioData())
+//                .audioData(word.getAudioData())
                 .explanation(word.getExplanation())
+//                .explanationAudio(word.getExplanationAudio())
+//                .translationAudio(word.getTranslationAudio())
+//                .exampleAudio(word.getExampleAudio())
+                .exampleAudioEncoded(exampleAudioEncoded)
+                .explanationAudioEncoded(explanationAudioEncoded)
+                .translationAudioEncoded(translationAudioEncoded)
                 .build();
     }
 
@@ -52,6 +63,9 @@ public class WordMapper {
                 .imageData(wordDTO.getImageData())
                 .audioData(wordDTO.getAudioData())
                 .explanation(wordDTO.getExplanation())
+                .explanationAudio(wordDTO.getExplanationAudio())
+                .translationAudio(wordDTO.getTranslationAudio())
+                .exampleAudio(wordDTO.getExampleAudio())
                 .build();
     }
 
@@ -67,6 +81,10 @@ public class WordMapper {
                 .sound(wordRequest.getSound())
                 .userId(userId)
                 .explanation(wordRequest.getExplanation())
+                .explanationAudio(wordRequest.getExplanationAudio())
+                .translationAudio(wordRequest.getTranslationAudio())
+                .exampleAudio(wordRequest.getExampleAudio())
+                .audioData(wordRequest.getAudioData())
                 .build();
     }
 

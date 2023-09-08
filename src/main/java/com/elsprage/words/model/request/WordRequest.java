@@ -24,4 +24,8 @@ public class WordRequest {
     private String sound;
     private String example;
     private String explanation;
+    private byte[] audioData;
+    private byte[] exampleAudio;
+    private byte[] translationAudio;
+    private byte[] explanationAudio;
 }

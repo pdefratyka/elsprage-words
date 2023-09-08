@@ -2,6 +2,7 @@ package com.elsprage.words.web.controller;
 
 import com.elsprage.words.model.dto.WordDTO;
 import com.elsprage.words.model.request.WordRequest;
+import com.elsprage.words.model.request.WordUpdateRequest;
 import com.elsprage.words.model.response.UsersWordsResponse;
 import com.elsprage.words.model.response.WordResponse;
 import com.elsprage.words.service.WordsService;
@@ -58,5 +59,14 @@ public class WordsController {
         log.info("Delete word with id: {}", wordId);
         wordsService.deleteWord(wordId, token);
         return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping
+    public ResponseEntity<WordResponse> updateWordsProperties
+            (@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody @Validated WordUpdateRequest wordRequest) {
+        log.info("Update word: {}", wordRequest);
+        final WordDTO savedWord = wordsService.updateWord(wordRequest, token);
+        final WordResponse wordResponse = new WordResponse(savedWord);
+        return ResponseEntity.ok(wordResponse);
     }
 }

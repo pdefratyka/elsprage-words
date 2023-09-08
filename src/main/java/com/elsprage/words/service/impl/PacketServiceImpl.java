@@ -2,7 +2,9 @@ package com.elsprage.words.service.impl;
 
 import com.elsprage.words.common.mapper.PacketMapper;
 import com.elsprage.words.exception.PacketException;
+import com.elsprage.words.model.dto.LanguageDTO;
 import com.elsprage.words.model.dto.PacketDTO;
+import com.elsprage.words.model.dto.PacketWithNumberOfWordsDTO;
 import com.elsprage.words.model.request.PacketRequest;
 import com.elsprage.words.persistance.entity.Packet;
 import com.elsprage.words.persistance.entity.Word;
@@ -14,9 +16,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,12 +44,55 @@ public class PacketServiceImpl implements PacketService {
     public Set<PacketDTO> getUsersPackets(String token) {
         final Long userId = jwtService.extractUserId(token);
         log.info("Get packets for user with id: {}", userId);
-        final Set<Packet> packets = packetRepository.findByUserId(userId);
+        final List<PacketWithNumberOfWordsDTO> packets = findPacketDTOsWithWordIdsByUserId(userId);
         final Set<PacketDTO> packetDTOS = packetMapper.mapToPacketDTOsWithoutWordsMapping(packets);
         sortPackets(packetDTOS);
         log.info("Users packets: {}", packetDTOS);
         return packetDTOS;
     }
+
+    public List<PacketWithNumberOfWordsDTO> findPacketDTOsWithWordIdsByUserId(Long userId) {
+        List<Object[]> results = packetRepository.findByUserIdPacketWithWords(userId);
+        List<PacketWithNumberOfWordsDTO> dtos = new ArrayList<>();
+
+        for (Object[] result : results) {
+            Integer id = (Integer) result[0];
+            String name = (String) result[1];
+            // The concatenated word IDs
+            Integer valueLanguageId = (Integer) result[2];
+            Integer translationLanguageId = (Integer) result[3];
+            String valueLanguageSymbol = (String) result[4];
+            String valueLanguageName = (String) result[5];
+            String translationLanguageSymbol = (String) result[6];
+            String translationLanguageName = (String) result[7];
+            String wordIds = (String) result[8];
+            List<Long> wordIdList = Arrays.stream(wordIds.split(";"))
+                    .map(Long::valueOf)
+                    .collect(Collectors.toList());
+
+            PacketWithNumberOfWordsDTO dto =
+                    PacketWithNumberOfWordsDTO.builder()
+                            .id(id.longValue())
+                            .name(name)
+                            .valueLanguageId(valueLanguageId.longValue())
+                            .translationLanguageId(translationLanguageId.longValue())
+                            .valueLanguage(LanguageDTO.builder()
+                                    .id(valueLanguageId.longValue())
+                                    .symbol(valueLanguageSymbol)
+                                    .name(valueLanguageName)
+                                    .build())
+                            .translationLanguage(LanguageDTO.builder()
+                                    .id(translationLanguageId.longValue())
+                                    .symbol(translationLanguageSymbol)
+                                    .name(translationLanguageName)
+                                    .build())
+                            .wordsIds(wordIdList)
+                            .build();
+            dtos.add(dto);
+        }
+        return dtos;
+    }
+
 
     @Override
     public PacketDTO getPacketById(final Long packetId, final String token) {

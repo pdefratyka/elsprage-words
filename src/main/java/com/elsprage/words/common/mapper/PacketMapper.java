@@ -1,6 +1,7 @@
 package com.elsprage.words.common.mapper;
 
 import com.elsprage.words.model.dto.PacketDTO;
+import com.elsprage.words.model.dto.PacketWithNumberOfWordsDTO;
 import com.elsprage.words.model.request.PacketRequest;
 import com.elsprage.words.persistance.entity.Packet;
 import com.elsprage.words.persistance.entity.Word;
@@ -8,6 +9,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -55,7 +57,7 @@ public final class PacketMapper {
                 .collect(Collectors.toSet());
     }
 
-    public PacketDTO mapToPacketDtoWithoutWordMapping(final Packet packet) {
+    public PacketDTO mapToPacketDtoWithoutWordMapping(final PacketWithNumberOfWordsDTO packet) {
         if (packet == null) {
             return null;
         }
@@ -64,14 +66,14 @@ public final class PacketMapper {
                 .name(packet.getName())
                 .valueLanguageId(packet.getValueLanguageId())
                 .translationLanguageId(packet.getTranslationLanguageId())
-                .valueLanguage(languageMapper.mapToLanguageDTO(packet.getValueLanguage()))
-                .translationLanguage(languageMapper.mapToLanguageDTO(packet.getTranslationLanguage()))
+                .valueLanguage(packet.getValueLanguage())
+                .translationLanguage(packet.getTranslationLanguage())
                 .id(packet.getId())
-                .wordsIds(packet.getWords().stream().map(Word::getId).toList())
+                .wordsIds(packet.getWordsIds())
                 .build();
     }
 
-    public Set<PacketDTO> mapToPacketDTOsWithoutWordsMapping(final Set<Packet> packets) {
+    public Set<PacketDTO> mapToPacketDTOsWithoutWordsMapping(final List<PacketWithNumberOfWordsDTO> packets) {
         return packets.stream()
                 .map(this::mapToPacketDtoWithoutWordMapping)
                 .collect(Collectors.toCollection(LinkedHashSet::new));
